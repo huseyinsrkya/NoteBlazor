@@ -79,7 +79,7 @@ public class NoteService
         }
         catch (DbUpdateConcurrencyException) when (!NoteExists(id))
         {
-            throw new Exception("Note could not delete. :/");
+            throw new DbUpdateConcurrencyException();
         }
     }
 
@@ -95,6 +95,7 @@ public class NoteService
         }
 
         data.IsDeleted = true;
+        _context.Note.Update(data);
 
         try
         {
@@ -102,7 +103,7 @@ public class NoteService
         }
         catch (DbUpdateConcurrencyException) when (!NoteExists(id))
         {
-            throw new Exception("note could not delete. :/");
+            throw new DbUpdateConcurrencyException();
         }
     }
 
@@ -122,6 +123,6 @@ public class NoteService
 
     private bool NoteExists(long id)
     {
-        return _context.Note.AsNoTracking().Any(e => e.Id == id);
+        return _context.Note.AsNoTracking().Any(e => e.IsDeleted==false && e.Id == id);
     }
 }

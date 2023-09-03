@@ -44,7 +44,7 @@ public class NoteService
         return data;
     }
 
-    public async Task CreateItem(NoteEntity note)
+    public async Task CreateNote(NoteEntity note)
     {
         var data = new NoteEntity
         {
@@ -55,10 +55,10 @@ public class NoteService
         _context.Note.Add(data);
 
         await _context.SaveChangesAsync();
-        _navigationManager.NavigateTo("Note");
+        _navigationManager.NavigateTo("note");
     }
 
-    public async Task UpdateItem(NoteEntity note, long id)
+    public async Task UpdateNote(NoteEntity note, long id)
     {
         var data = await _context.Note
             .Where(x => x.IsDeleted == false && x.Id == id)
@@ -66,7 +66,7 @@ public class NoteService
 
         if (data == null)
         {
-            throw new Exception("No note here. :/");
+            throw new Exception("No note here! ");
         }
 
         data.Title = note.Title;
@@ -83,7 +83,7 @@ public class NoteService
         }
     }
 
-    public async Task DeleteItem(long id)
+    public async Task DeleteNote(long id)
     {
         var data = await _context.Note
             .Where(x => x.IsDeleted == false && x.Id == id)
